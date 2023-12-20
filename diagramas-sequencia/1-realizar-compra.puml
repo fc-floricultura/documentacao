@@ -20,10 +20,10 @@ cliente -> lojaApi ++ #LightCoral
 
 note left of cliente #LightGray
     **HTTP POST**
-    **/loja/api/v1/compras **
+    **/loja/api/v1/pedidos **
     {
         "cpfCliente": 1,
-        "endenrecoEntrega": {
+        "enderecoEntrega": {
             "rua": "Rua das Flores",
             "numero": 1,
             "estado": "SP",
