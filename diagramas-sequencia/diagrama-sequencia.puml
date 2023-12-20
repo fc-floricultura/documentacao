@@ -1,0 +1,63 @@
+@startuml
+title <font size=30>Market place floricultura
+legend top
+<font size=20>Este diagrama tem como finalidade demonstrar as integrações do market place
+end legend
+
+box #c3e4fa
+    actor cliente #LightGray
+end box
+
+box  Loja #fcf9cc
+    participant lojaApi #LightCoral
+    database lojadb #LightCoral
+end box
+
+box  Fornecedor #fcf9cc
+    participant fornecedorApi #LightGreen
+    database fornecedordb #LightGreen
+end box
+
+box  Transportador #fcf9cc
+    participant transportadorApi #LightBlue
+    database transportadordb #LightBlue
+end box
+
+
+autonumber
+
+cliente -> lojaApi ++ #LightCoral
+
+group Realizar compra
+lojaApi -> lojadb ++ #LightCoral : Salvar pedido
+lojadb --> lojaApi -- #LightCoral
+end group
+|||
+
+group Realizar pedido
+lojaApi -> fornecedorApi ++ #LightGreen : Realizar pedido no fornecedor
+fornecedorApi -> fornecedordb ++ #LightGreen : Salvar pedido
+fornecedordb --> fornecedorApi -- #LightGreen
+fornecedorApi --> lojaApi -- #LightCoral : Retorno pedido fornecedor
+end group
+|||
+
+lojaApi --> lojaApi  #LightCoral : Atualizar compra | pedido criado
+|||
+
+group Realizar reserva de entrega
+lojaApi -> transportadorApi ++ #LightBlue : Reservar entrega
+transportadorApi -> transportadorApi #LightBlue : Calcular previsão de entrega
+transportadorApi -> transportadordb ++ #LightBlue : Salvar reserva
+transportadordb --> transportadorApi -- #LightBlue
+transportadorApi --> lojaApi -- #LightCoral : Retorno voucher
+end group
+|||
+
+lojaApi --> lojaApi  #LightCoral : Atualizar compra | reserva criada
+|||
+
+lojaApi --> cliente ++ #LightGray : Retorno compra
+
+
+@enduml

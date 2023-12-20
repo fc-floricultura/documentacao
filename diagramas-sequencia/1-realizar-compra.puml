@@ -1,0 +1,50 @@
+@startuml
+title <font size=30>Market place floricultura
+legend top
+<font size=20>Este diagrama tem como finalidade demonstrar as integrações do market place
+end legend
+
+box #c3e4fa
+    actor cliente #LightGray
+end box
+
+box  Loja #fcf9cc
+    participant lojaApi #LightCoral
+    database lojadb #LightCoral
+end box
+
+
+autonumber
+
+cliente -> lojaApi ++ #LightCoral
+
+note left of cliente #LightGray
+    **HTTP POST**
+    **/loja/api/v1/compras **
+    {
+        "cpfCliente": 1,
+        "endenrecoEntrega": {
+            "rua": "Rua das Flores",
+            "numero": 1,
+            "estado": "SP",
+        },
+        "produtos": [],
+    }
+end note
+group Realizar compra
+lojaApi -> lojadb ++ #LightCoral : Salvar compra
+lojadb --> lojaApi -- #LightCoral
+end group
+|||
+
+note over lojaApi #LightCoral
+    **HTTP Response**
+    {
+        "cpfCliente": 1,
+        "status": "Compra recebida",
+        "produtos": [],
+    }
+end note
+lojaApi --> cliente ++ #LightGray : Retorno compra
+
+@enduml
